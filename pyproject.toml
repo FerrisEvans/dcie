@@ -1,0 +1,11 @@
+[project]
+name = "dcie"
+version = "0.1.0"
+description = "Document Compliance Identification Engine/dcie"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.116.1",
+    "loguru>=0.7.3",
+    "uvicorn>=0.35.0",
+]
