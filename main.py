@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
-from app.core.logger import setup_logging, logger
+from core.logger import setup_logging, log
 
 app = FastAPI()
 
@@ -19,13 +19,13 @@ async def run_app():
 
 @app.get("/hello")
 async def hello():
-    logger.trace("Hello")
-    logger.debug("Hello")
-    logger.info("Hello")
-    logger.success("Hello")
-    logger.warning("Hello")
-    logger.error("Hello")
-    logger.critical("Hello")
+    log.trace("Hello")
+    log.debug("Hello")
+    log.info("Hello")
+    log.success("Hello")
+    log.warning("Hello")
+    log.error("Hello")
+    log.critical("Hello")
     return {"hello": "world"}
 
 if __name__ == '__main__':
