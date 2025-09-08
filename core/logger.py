@@ -5,7 +5,7 @@ from pathlib import Path
 
 from loguru import logger as log
 
-from config.settings import conf
+from core.settings import conf
 
 
 class InterceptHandler(logging.Handler):
