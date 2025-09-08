@@ -1,0 +1,29 @@
+api = "/api/v1"
+debug = true
+
+[log]
+rotation = "00:00"
+retention = "3 days"
+compression = "zip"
+
+[http]
+enable_cors = true
+allow_origins = ["*"]
+allow_headers = ["*"]
+allow_methods = ["*"]
+allow_credentials = true
+
+[redis]
+username = ""
+password = ""
+host = ""
+port = 6379
+database = ""
+ssl = false
+
+[database.master]
+username = ""
+password = ""
+host = ""
+port = 5432
+database = ""

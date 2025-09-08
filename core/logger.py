@@ -5,7 +5,7 @@ from pathlib import Path
 
 from loguru import logger as log
 
-import config.settings as settings
+from config.settings import conf
 
 
 class InterceptHandler(logging.Handler):
@@ -53,14 +53,14 @@ async def setup_logging():
     log.add(
         sys.stdout,
         format=log_format,
-        level="DEBUG" if settings.DEBUG else "INFO",
+        level="DEBUG" if conf.debug else "INFO",
         enqueue=True,  # 异步写入
         backtrace=True,  # 完整异常回溯
         diagnose=True,  # 变量值等诊断信息
         colorize=True,
     )
 
-    log_dir = Path(settings.BASE_DIR, "logs")
+    log_dir = Path(conf.base_dir, "logs")
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
@@ -68,9 +68,9 @@ async def setup_logging():
         str(log_dir / "all_{time:YYYY-MM-DD}.log"),
         format=log_format,
         level="INFO",
-        rotation=settings.LOG_ROTATION,
-        retention=settings.LOG_RETENTION,
-        compression=settings.LOG_COMPRESSION,
+        rotation=conf.log.rotation,
+        retention=conf.log.retention,
+        compression=conf.log.compression,
         encoding="UTF-8",
         enqueue=True,
     )
@@ -78,9 +78,9 @@ async def setup_logging():
         str(log_dir / "error_{time:YYYY-MM-DD}.log"),
         format=log_format,
         level="ERROR",
-        rotation=settings.LOG_ROTATION,
-        retention=settings.LOG_RETENTION,
-        compression=settings.LOG_COMPRESSION,
+        rotation=conf.log.rotation,
+        retention=conf.log.retention,
+        compression=conf.log.compression,
         encoding="UTF-8",
         enqueue=True,
     )

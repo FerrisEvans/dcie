@@ -1,35 +1,96 @@
-from enum import Enum
-from urllib .parse import quote_plus
+import pathlib
+from typing import List, Tuple, Type
 
-class Env(Enum):
-    DEV = {"file": "config/profile/dev.py"}
-    PROD = {"file": "config/profile/prod.py"}
-
-env = Env.DEV
-
-match env:
-    case Env.PROD:
-        from config.profile.prod import *
-    case _:
-        from config.profile.dev import *
+from pydantic import BaseModel, PostgresDsn, RedisDsn, computed_field
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict, TomlConfigSettingsSource
 
 
-MASTER_DB_URL = f"postgresql+psycopg2://{PG_USER}:{quote_plus(PG_PWD)}@{PG_HOST}:{PG_PORT}/{PG_DB}"
-# TODO multi datasource
-SLAVE1_DB_URL = ""
-SLAVE2_DB_URL = ""
-REDIS_URL = f"redis://{REDIS_USER}@{quote_plus(REDIS_PWD)}{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
-# 日志配置
-LOG_ROTATION = "00:00"
-LOG_RETENTION = "3 days"
-LOG_COMPRESSION = "zip"
-# 是否启用跨域
-CORS_ORIGIN_ENABLE = True
-# 允许访问的域名列表
-ALLOW_ORIGINS = ["*"]
-# 是否支持携带 cookie
-ALLOW_CREDENTIALS = True
-# 允许跨域的 http 方法， get / post / put 等
-ALLOW_METHODS = ["*"]
-# 允许迭代的headers，可以用来鉴别来源等作用
-ALLOW_HEADERS = ["*"]
+class DatasourceConfig(BaseModel):
+    username: str
+    password: str
+    host: str
+    port: int
+    database: str
+
+
+class DatabaseConfig(BaseModel):
+    master: DatasourceConfig = None
+    # TODO multi datasource
+    slave: List[DatasourceConfig] = list()
+
+
+class RedisConfig(BaseModel):
+    username: str
+    password: str
+    host: str
+    port: int
+    database: str
+    ssl: bool = False
+
+
+class LogConfig(BaseModel):
+    rotation: str = "00:00"
+    retention: str = "3 days"
+    compression: str = "zip"
+
+
+class HttpConfig(BaseModel):
+    enable_cors: bool = True
+    allow_origins: List[str] = ["*"]
+    allow_headers: List[str] = ["*"]
+    allow_methods: List[str] = ["*"]
+    allow_credentials: bool = True
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        toml_file="../config.toml",
+        env_file_encoding="utf-8",
+        env_ignore_empty=True,
+        extra="ignore",
+    )
+    debug: bool = True
+    api: str = "/api/v1"
+    base_dir: str = pathlib.Path(__file__).resolve().parent.parent.parent.__str__()
+    log: LogConfig = LogConfig()
+    http: HttpConfig = HttpConfig()
+    redis: RedisConfig = None
+    database: DatabaseConfig = None
+
+    @computed_field
+    @property
+    def redis_url(self) -> RedisDsn:
+        return RedisDsn.build(
+            scheme="redis",
+            username=self.redis.username,
+            password=self.redis.password,
+            host=self.redis.host,
+            port=self.redis.port,
+            path=self.redis.database,
+        )
+
+    @computed_field
+    @property
+    def master_db_url(self) -> PostgresDsn:
+        return PostgresDsn.build(
+            scheme="postgresql+psycopg2",
+            username=self.database.master.username,
+            password=self.database.master.password,
+            host=self.database.master.host,
+            port=self.database.master.port,
+            path=self.database.master.database,
+        )
+
+    @classmethod
+    def settings_customise_sources(
+            cls,
+            settings_cls: Type[BaseSettings],
+            init_settings: PydanticBaseSettingsSource,
+            env_settings: PydanticBaseSettingsSource,
+            dotenv_settings: PydanticBaseSettingsSource,
+            file_secret_settings: PydanticBaseSettingsSource
+    ) -> Tuple[PydanticBaseSettingsSource, ...]:
+        return (TomlConfigSettingsSource(settings_cls=settings_cls),)
+
+
+conf = Settings()
