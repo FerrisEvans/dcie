@@ -5,22 +5,23 @@ import uvicorn
 from fastapi import FastAPI
 
 from core.settings import conf
-from core.conn import get_redis
+from core.conn import master_async_engine, get_redis
 from core.logger import setup_logging, log
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        app.postgres_pool = asyncpg.create_pool(
-            dsn=conf.master_db_url.unicode_string(),
-            min_size=conf.database.master.min_size,
-            max_size=conf.database.master.max_size,
-        )
-        log.success(f"Postgres pool created, idle size: {app.postgres_pool.get_idle_size()}")
+        # app.postgres_pool = asyncpg.create_pool(
+        #     dsn=conf.master_db_url.unicode_string(),
+        #     min_size=conf.database.master.min_size,
+        #     max_size=conf.database.master.max_size,
+        # )
+        # log.success(f"Postgres pool created, idle size: {app.postgres_pool.get_idle_size()}")
         app.redis = await get_redis()
         yield
     finally:
-        await app.postgres_pool.close()
+        # await app.postgres_pool.close()
+        await master_async_engine.dispose()
         log.success("Postgres pool closed")
         app.redis.close()
         log.success("Redis closed")

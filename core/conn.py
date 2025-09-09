@@ -44,4 +44,5 @@ async def get_redis() -> Redis:
         url=conf.redis_url.unicode_string(),
         encoding="utf-8",
         decode_responses=True,
+        ssl=conf.redis.ssl
     )
