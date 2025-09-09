@@ -1,9 +1,41 @@
+from contextlib import asynccontextmanager
+
+import asyncpg
 import uvicorn
 from fastapi import FastAPI
 
+from core.settings import conf
+from core.conn import get_redis
 from core.logger import setup_logging, log
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        app.postgres_pool = asyncpg.create_pool(
+            dsn=conf.master_db_url.unicode_string(),
+            min_size=conf.database.master.min_size,
+            max_size=conf.database.master.max_size,
+        )
+        log.success(f"Postgres pool created, idle size: {app.postgres_pool.get_idle_size()}")
+        app.redis = await get_redis()
+        yield
+    finally:
+        await app.postgres_pool.close()
+        log.success("Postgres pool closed")
+        app.redis.close()
+        log.success("Redis closed")
+
+app = FastAPI(
+    title="dcie",
+    description="document compliance identification engine",
+    version="0.1.0",
+    docs_url="/docs",
+    contact={
+        "name": "Ferris",
+        "email": "ferris.ai@icloud.com",
+    },
+    lifespan=lifespan,
+)
 
 
 async def run_app():
@@ -16,17 +48,6 @@ async def run_app():
     )
     server = uvicorn.Server(config)
     await server.serve()
-
-@app.get("/hello")
-async def hello():
-    log.trace("Hello")
-    log.debug("Hello")
-    log.info("Hello")
-    log.success("Hello")
-    log.warning("Hello")
-    log.error("Hello")
-    log.critical("Hello")
-    return {"hello": "world"}
 
 if __name__ == '__main__':
     import asyncio

@@ -5,6 +5,7 @@ description = "Document Compliance Identification Engine/dcie"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "asyncpg>=0.30.0",
     "fastapi>=0.116.1",
     "loguru>=0.7.3",
     "pydantic-settings>=2.10.1",

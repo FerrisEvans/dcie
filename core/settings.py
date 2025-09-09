@@ -11,8 +11,8 @@ class DatasourceConfig(BaseModel):
     host: str
     port: int
     database: str
-    schema: str
-    pool_size: int
+    min_size: int
+    max_size: int
     pool_timeout: int
     pool_recycle: int
     max_overflow: int
@@ -78,7 +78,8 @@ class Settings(BaseSettings):
     @property
     def master_db_url(self) -> PostgresDsn:
         return PostgresDsn.build(
-            scheme="postgresql+psycopg2",
+            scheme="postgresql+asyncpg",
+            # scheme="postgresql+psycopg2",
             username=self.database.master.username,
             password=self.database.master.password,
             host=self.database.master.host,
