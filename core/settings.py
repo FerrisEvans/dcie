@@ -11,6 +11,11 @@ class DatasourceConfig(BaseModel):
     host: str
     port: int
     database: str
+    schema: str
+    pool_size: int
+    pool_timeout: int
+    pool_recycle: int
+    max_overflow: int
 
 
 class DatabaseConfig(BaseModel):
