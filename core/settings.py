@@ -56,7 +56,7 @@ class Settings(BaseSettings):
     )
     debug: bool = True
     api: str = "/api/v1"
-    base_dir: str = pathlib.Path(__file__).resolve().parent.parent.parent.__str__()
+    base_dir: str = pathlib.Path(__file__).resolve().parent.parent.__str__()
     log: LogConfig = LogConfig()
     http: HttpConfig = HttpConfig()
     redis: RedisConfig = None
