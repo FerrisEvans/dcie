@@ -1,0 +1,8 @@
+- category: basic vehicle data
+  rules:
+    - title: 车辆识别码
+      pattern: ""
+    - title: 车牌号
+      pattern: ""
+    - title: 车辆型号代码
+      pattern: ""

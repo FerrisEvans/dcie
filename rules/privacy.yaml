@@ -1,0 +1,21 @@
+- category: identification information
+  rules:
+    - title: 电话号码
+      pattern: "^1[3-9]\d{9}$"
+    - title: 邮箱地址
+      pattern: "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+    - title: ip 地址
+      pattern: "^((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.|$)){4}$"
+    - title: 身份证
+      pattern: "^[1-9]\d{5}(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[0-9Xx]$"
+    - title: 护照
+      pattern: "^(E\d{8}|G\d{8}|D\d{8}|P\d{7}|S\d{7,8}|H\d{8})$"
+    - title: 港澳台通行证
+      pattern: "^([HMhm]\d{8}|T\d{8}|\d{9})$"
+    - title: 驾驶证
+      pattern: "^[A-Z0-9]{18}$"
+- category: common devices information
+  rules:
+    - title: 设备 mac 地址
+      pattern: "^([0-9A-Fa-f]{2}([-:])){5}[0-9A-Fa-f]{2}$"
+
