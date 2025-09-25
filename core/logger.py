@@ -3,9 +3,9 @@ import os
 import sys
 from pathlib import Path
 
-from loguru import logger as log
+from loguru import logger
 
-from core.settings import conf
+from core import conf
 
 
 class InterceptHandler(logging.Handler):
@@ -21,7 +21,7 @@ class InterceptHandler(logging.Handler):
     def emit(self, record: logging.LogRecord) -> None:
         # 尝试获取日志级别名称
         try:
-            level = log.level(record.levelname).name
+            level = logger.level(record.levelname).name
         except ValueError:
             level = record.levelno
 
@@ -32,7 +32,7 @@ class InterceptHandler(logging.Handler):
             depth += 1
 
         # 使用 Loguru 记录日志
-        log.opt(depth=depth, exception=record.exc_info).log(
+        logger.opt(depth=depth, exception=record.exc_info).log(
             level,
             record.getMessage()
         )
@@ -40,8 +40,8 @@ class InterceptHandler(logging.Handler):
 
 async def setup_logging():
     # 移除默认处理器
-    log.configure(extra={"request_id": ""})
-    log.remove()
+    logger.configure(extra={"request_id": ""})
+    logger.remove()
     # 日志格式
     log_format = (
         "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
@@ -50,7 +50,7 @@ async def setup_logging():
         "<cyan>{name}</cyan>:<magenta>{function}</magenta>:<blue>{line}</blue> - "
         "<level>{message}</level>"
     )
-    log.add(
+    logger.add(
         sys.stdout,
         format=log_format,
         level="DEBUG" if conf.debug else "INFO",
@@ -64,7 +64,7 @@ async def setup_logging():
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    log.add(
+    logger.add(
         str(log_dir / "all_{time:YYYY-MM-DD}.log"),
         format=log_format,
         level="INFO",
@@ -74,7 +74,7 @@ async def setup_logging():
         encoding="UTF-8",
         enqueue=True,
     )
-    log.add(
+    logger.add(
         str(log_dir / "error_{time:YYYY-MM-DD}.log"),
         format=log_format,
         level="ERROR",
@@ -99,4 +99,4 @@ async def setup_logging():
         _logger.handlers = [InterceptHandler()]
         _logger.propagate = False
     # trace debug info success warning error critical
-    log.success("Logger init successfully.")
+    logger.success("Logger init successfully.")
