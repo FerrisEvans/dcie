@@ -14,6 +14,7 @@
       pattern: "^([HMhm]\d{8}|T\d{8}|\d{9})$"
     - title: 驾驶证
       pattern: "^[A-Z0-9]{18}$"
+
 - category: common devices information
   rules:
     - title: 设备 mac 地址
