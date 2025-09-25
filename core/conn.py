@@ -6,7 +6,8 @@ from redis import Redis
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 
-from core import conf, log
+from core import conf
+from core.logger import log
 
 master_async_engine = create_async_engine(
     url=conf.master_db_url.unicode_string(),

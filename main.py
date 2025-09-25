@@ -1,10 +1,8 @@
 from contextlib import asynccontextmanager
 
-import asyncpg
 import uvicorn
 from fastapi import FastAPI
 
-from core.settings import conf
 from core.conn import master_async_engine, get_redis
 from core.logger import setup_logging, log
 

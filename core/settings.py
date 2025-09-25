@@ -64,6 +64,17 @@ class Settings(BaseSettings):
 
     @computed_field
     @property
+    def reg_path(self) -> pathlib.Path:
+        reg_rules_path = "/rules/reg"
+        return pathlib.Path(f"{self.base_dir}{reg_rules_path}")
+
+    @computed_field
+    @property
+    def sensitive_words_dict_path(self) -> pathlib.Path:
+        return pathlib.Path(f"{self.base_dir}/rules/vocabulary")
+
+    @computed_field
+    @property
     def redis_url(self) -> RedisDsn:
         return RedisDsn.build(
             scheme="redis",

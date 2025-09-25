@@ -8,7 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette import status
 from starlette.exceptions import HTTPException
 
-from core import log
+from core.logger import log
 
 
 class BizException(Exception):

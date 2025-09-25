@@ -3,10 +3,9 @@ import os
 import sys
 from pathlib import Path
 
-from loguru import logger
+from loguru import logger as log
 
 from core import conf
-
 
 class InterceptHandler(logging.Handler):
     """
@@ -21,7 +20,7 @@ class InterceptHandler(logging.Handler):
     def emit(self, record: logging.LogRecord) -> None:
         # 尝试获取日志级别名称
         try:
-            level = logger.level(record.levelname).name
+            level = log.level(record.levelname).name
         except ValueError:
             level = record.levelno
 
@@ -32,7 +31,7 @@ class InterceptHandler(logging.Handler):
             depth += 1
 
         # 使用 Loguru 记录日志
-        logger.opt(depth=depth, exception=record.exc_info).log(
+        log.opt(depth=depth, exception=record.exc_info).log(
             level,
             record.getMessage()
         )
@@ -40,8 +39,8 @@ class InterceptHandler(logging.Handler):
 
 async def setup_logging():
     # 移除默认处理器
-    logger.configure(extra={"request_id": ""})
-    logger.remove()
+    log.configure(extra={"request_id": ""})
+    log.remove()
     # 日志格式
     log_format = (
         "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
@@ -50,7 +49,7 @@ async def setup_logging():
         "<cyan>{name}</cyan>:<magenta>{function}</magenta>:<blue>{line}</blue> - "
         "<level>{message}</level>"
     )
-    logger.add(
+    log.add(
         sys.stdout,
         format=log_format,
         level="DEBUG" if conf.debug else "INFO",
@@ -64,7 +63,7 @@ async def setup_logging():
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    logger.add(
+    log.add(
         str(log_dir / "all_{time:YYYY-MM-DD}.log"),
         format=log_format,
         level="INFO",
@@ -74,7 +73,7 @@ async def setup_logging():
         encoding="UTF-8",
         enqueue=True,
     )
-    logger.add(
+    log.add(
         str(log_dir / "error_{time:YYYY-MM-DD}.log"),
         format=log_format,
         level="ERROR",
@@ -93,10 +92,11 @@ async def setup_logging():
         "uvicorn.access",
         "uvicorn.asgi",
         "fastapi",
+        "sqlalchemy",
         "fastapi.error",
     ]:
         _logger = logging.getLogger(logger_name)
         _logger.handlers = [InterceptHandler()]
         _logger.propagate = False
     # trace debug info success warning error critical
-    logger.success("Logger init successfully.")
+    log.success("Logger init successfully.")
