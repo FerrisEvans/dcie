@@ -2,9 +2,12 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
-from app import tools_router
+from app import routers
+from core import conf
 from core.conn import master_async_engine, get_redis
+from core.exceptions import register_exception
 from core.logger import setup_logging, log
 
 @asynccontextmanager
@@ -29,6 +32,7 @@ app = FastAPI(
     title="dcie",
     description="document compliance identification engine",
     version="0.1.0",
+    root_path=conf.api,
     docs_url="/docs",
     contact={
         "name": "Ferris",
@@ -40,7 +44,20 @@ app = FastAPI(
 
 async def run_app():
     await setup_logging()
-    app.include_router(tools_router)
+    # 注册全局异常
+    register_exception(app=app)
+    # 跨域
+    if conf.http.enable_cors:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=conf.http.allow_origins,
+            allow_credentials=conf.http.allow_credentials,
+            allow_methods=conf.http.allow_methods,
+            allow_headers=conf.http.allow_headers,
+        )
+    # api
+    for r in routers:
+        app.include_router(r)
     config = uvicorn.Config(
         "main:app",
         host="0.0.0.0",

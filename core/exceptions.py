@@ -44,7 +44,7 @@ async def log_error(message: str, req: ReqInfo, exc: Exception, **kwargs):
     log.exception(exc)
 
 
-def register_exception_handler(app: FastAPI):
+def register_exception(app: FastAPI):
     @app.exception_handler(BizException)
     async def biz_exc(request: Request, exc: BizException):
         request_info = await extract_request_info(request)
