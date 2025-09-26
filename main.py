@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from fastapi import FastAPI
 
+from app import tools_router
 from core.conn import master_async_engine, get_redis
 from core.logger import setup_logging, log
 
@@ -39,6 +40,7 @@ app = FastAPI(
 
 async def run_app():
     await setup_logging()
+    app.include_router(tools_router)
     config = uvicorn.Config(
         "main:app",
         host="0.0.0.0",
