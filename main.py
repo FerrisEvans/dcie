@@ -50,10 +50,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-@app.get("/healthcheck")
-async def healthcheck():
-    return {"status": "ok"}
-
 # 注册全局异常
 register_exception(app=app)
 # 跨域
