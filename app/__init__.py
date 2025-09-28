@@ -2,10 +2,10 @@ from typing import List
 
 from fastapi import APIRouter
 
-from .tools import router as tools_router
+from .uploader import router as upload_router
 
 routers: List[APIRouter] = [
-    tools_router,
+    upload_router,
 ]
 
 __all__ = ["routers", ]

@@ -46,6 +46,11 @@ class HttpConfig(BaseModel):
     allow_methods: List[str] = ["*"]
     allow_credentials: bool = True
 
+class Engine(BaseModel):
+    support_file_types: List[str]
+    regex_path: str
+    vocabulary_path: str
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -61,17 +66,17 @@ class Settings(BaseSettings):
     http: HttpConfig = HttpConfig()
     redis: RedisConfig = None
     database: DatabaseConfig = None
+    engine: Engine = None
 
     @computed_field
     @property
     def reg_path(self) -> pathlib.Path:
-        reg_rules_path = "/rules/reg"
-        return pathlib.Path(f"{self.base_dir}{reg_rules_path}")
+        return pathlib.Path(f"{self.base_dir}{self.engine.regex_path}")
 
     @computed_field
     @property
     def sensitive_words_dict_path(self) -> pathlib.Path:
-        return pathlib.Path(f"{self.base_dir}/rules/vocabulary")
+        return pathlib.Path(f"{self.base_dir}{self.engine.vocabulary_path}")
 
     @computed_field
     @property

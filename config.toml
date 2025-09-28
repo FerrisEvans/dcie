@@ -32,3 +32,11 @@ pool_recycle = 3600
 min_size = 5
 max_size = 20
 max_overflow = 5
+
+[engine]
+support_file_types = [
+    "txt", "log", "csv", "md", "json", "ppt", "pptx", "pdf", "doc", "docx", "xls", "xlsx",
+    "png", "jpg", "jpeg", "bmp", "mp3", "m4a",
+]
+regex_path = "/rules/reg"
+vocabulary_path = "/rules/vocabulary"

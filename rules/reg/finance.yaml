@@ -1,9 +1,9 @@
 - category: financial data
   rules:
     - title: 个人银行账户
-      pattern: ""
+      pattern: ''
     - title: 信用卡信息
-      pattern: ""
+      pattern: ''
     - title: 公积金账户
-      pattern: ""
+      pattern: ''
 
