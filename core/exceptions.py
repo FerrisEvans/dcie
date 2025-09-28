@@ -97,6 +97,6 @@ def register_exception(app: FastAPI):
 
     @app.exception_handler(Exception)
     async def global_exc(request: Request, exc: Exception):
-        request_info = await extract_request_info(request)
-        await log_error("Unexpected Exception", request_info, exc)
+        log.error(f"Request: [{request.method}]//[{request.url.path}] failed with exception: [{repr(exc)}]")
+        log.exception(exc)
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"message": status.HTTP_500_INTERNAL_SERVER_ERROR.__str__()})
