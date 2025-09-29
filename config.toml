@@ -40,3 +40,4 @@ support_file_types = [
 ]
 regex_path = "/rules/reg"
 vocabulary_path = "/rules/vocabulary"
+# tmp_base_path 默认 {prject_root}/tmp

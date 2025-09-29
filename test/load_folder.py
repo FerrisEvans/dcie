@@ -3,7 +3,7 @@ import re
 from collections import defaultdict
 from typing import Any, Dict
 
-from core import conf
+from common import conf
 
 
 def _load_patterns():

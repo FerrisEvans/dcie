@@ -46,10 +46,12 @@ class HttpConfig(BaseModel):
     allow_methods: List[str] = ["*"]
     allow_credentials: bool = True
 
+
 class Engine(BaseModel):
     support_file_types: List[str]
     regex_path: str
     vocabulary_path: str
+    tmp_base_path: str = f"{pathlib.Path(__file__).resolve().parent.parent.__str__()}/tmp"
 
 
 class Settings(BaseSettings):
@@ -77,6 +79,11 @@ class Settings(BaseSettings):
     @property
     def sensitive_words_dict_path(self) -> pathlib.Path:
         return pathlib.Path(f"{self.base_dir}{self.engine.vocabulary_path}")
+
+    @computed_field
+    @property
+    def tmp_upload_dir(self) -> pathlib.Path:
+        return pathlib.Path(f"{self.engine.tmp_base_path}/upload")
 
     @computed_field
     @property

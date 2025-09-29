@@ -1,5 +1,3 @@
-from .settings import Settings
+from .ac import enhance_detect as ac_detect
 
-conf = Settings()
-
-__all__ = ["conf", ]
+__all__ = ["ac_detect"]

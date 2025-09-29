@@ -3,8 +3,8 @@ import re
 from collections import defaultdict
 from typing import Any, Dict
 
-from core import conf
-from core.logger import log
+from common import conf
+from common.logger import log
 
 def _load_patterns():
     all_rules = []

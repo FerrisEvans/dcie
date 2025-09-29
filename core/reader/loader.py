@@ -7,9 +7,9 @@ import tempfile
 
 from docx import Document
 
-from engine.reader import asr as asr_processor
-from engine.reader import ocr as ocr_instance
-from core.logger import log
+from core.reader import asr as asr_processor
+from core.reader import ocr as ocr_instance
+from common.logger import log
 
 COMMON_ENCODINGS = ['utf-8', 'gbk', 'gb18030', 'big5', 'latin1']
 

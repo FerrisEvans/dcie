@@ -107,14 +107,14 @@ class Ocr:
             shutil.rmtree(temp_dir, ignore_errors=True)
 
 
-if __name__ == "__main__":
-    o = Ocr()
-    img_path = "/home/ecs-user/workspace/hai/data/test.png"
-    pdf_path = "/home/ecs-user/workspace/hai/data/2pdf.pdf"
-    o.read(pdf_path)
-
-    dest = "/home/ecs-user/workspace/hai/data/res/"
-    doc = "/home/ecs-user/workspace/hai/data/test.docx"
-    # print(o.read_pic_from_doc(doc, dest))
+# if __name__ == "__main__":
+#     o = Ocr()
+#     img_path = "/home/ecs-user/workspace/hai/data/test.png"
+#     pdf_path = "/home/ecs-user/workspace/hai/data/2pdf.pdf"
+#     o.read(pdf_path)
+#
+#     dest = "/home/ecs-user/workspace/hai/data/res/"
+#     doc = "/home/ecs-user/workspace/hai/data/test.docx"
+#     # print(o.read_pic_from_doc(doc, dest))
 
 

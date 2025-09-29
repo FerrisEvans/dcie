@@ -1,7 +1,7 @@
 from funasr import AutoModel
 from funasr.utils.postprocess_utils import rich_transcription_postprocess
 
-from core.logger import log
+from common.logger import log
 
 # 初始化全局ASR处理器（单例模式）
 class Asr:

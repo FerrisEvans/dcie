@@ -5,10 +5,10 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from app import routers
-from core import conf
-from core.conn import master_async_engine, get_redis
-from core.exceptions import register_exception
-from core.logger import setup_logging, log
+from common import conf
+from common.conn import master_async_engine, get_redis
+from common.exceptions import register_exception
+from common.logger import setup_logging, log
 
 async def run_app():
     await setup_logging()
