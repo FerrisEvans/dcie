@@ -1,3 +1,6 @@
 from .ac import enhance_detect as ac_detect
+from .bert import TextClassifier
 
-__all__ = ["ac_detect"]
+classifier = TextClassifier()
+
+__all__ = ["ac_detect", "classifier"]

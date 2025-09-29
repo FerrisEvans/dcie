@@ -33,6 +33,11 @@ min_size = 5
 max_size = 20
 max_overflow = 5
 
+[bert]
+model_path = "/home/ferris/project/dcie/trainer/single_label/best_model"
+threshold = 0.9
+exclude_labels = ["normal"]
+
 [engine]
 support_file_types = [
     "txt", "log", "csv", "md", "json", "ppt", "pptx", "pdf", "doc", "docx", "xls", "xlsx",
@@ -41,3 +46,4 @@ support_file_types = [
 regex_path = "/rules/reg"
 vocabulary_path = "/rules/vocabulary"
 # tmp_base_path 默认 {prject_root}/tmp
+rule_engine_api = "http://localhost:8080/api/v1"

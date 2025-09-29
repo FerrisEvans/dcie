@@ -15,8 +15,8 @@ class Bert(BaseModel):
     __tablename__ = "res_bert"
     task_id: Mapped[str]
     filename: Mapped[str]
-    label: Mapped[Optional[str]] # 标签
-    score: Mapped[Optional[float]] # 评分
-    start_pos: Mapped[Optional[int]] # 上下文开始位置
-    end_pos: Mapped[Optional[int]] # 上下文结束位置
-    context: Mapped[Optional[str]] # 上下文
+    label: Mapped[Optional[str]]
+    score: Mapped[Optional[float]]
+    start_pos: Mapped[Optional[int]]
+    end_pos: Mapped[Optional[int]]
+    context: Mapped[Optional[str]]

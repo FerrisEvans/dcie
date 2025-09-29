@@ -46,12 +46,17 @@ class HttpConfig(BaseModel):
     allow_methods: List[str] = ["*"]
     allow_credentials: bool = True
 
+class BertConfig(BaseModel):
+    model_path: str
+    threshold: float
+    exclude_labels: List[str] = list()
 
 class Engine(BaseModel):
     support_file_types: List[str]
     regex_path: str
     vocabulary_path: str
     tmp_base_path: str = f"{pathlib.Path(__file__).resolve().parent.parent.__str__()}/tmp"
+    rule_engine_api: str
 
 
 class Settings(BaseSettings):
@@ -68,6 +73,7 @@ class Settings(BaseSettings):
     http: HttpConfig = HttpConfig()
     redis: RedisConfig = None
     database: DatabaseConfig = None
+    bert: BertConfig = None
     engine: Engine = None
 
     @computed_field
