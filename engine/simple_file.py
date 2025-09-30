@@ -8,7 +8,7 @@ from common import conf
 from common.exceptions import BizException
 from common.logger import log
 from core.reg import match_patterns
-from core.req import rule_engine_req, llm_req
+from core.req import rule_engine_req, beacon_req
 from core.reader import read
 from engine import detector
 
@@ -37,6 +37,6 @@ def single_file_handler(file: UploadFile, task_id: str = None) -> dict:
         "res_bert": res_bert,
     })
     # 请求 llm，写 prompt，询问大语言模型的改进意见等
-    suggestion = llm_req(resp)
+    suggestion = beacon_req(resp)
     resp["suggestion"] = suggestion
     return resp

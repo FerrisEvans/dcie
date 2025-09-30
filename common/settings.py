@@ -57,6 +57,7 @@ class Engine(BaseModel):
     vocabulary_path: str
     tmp_base_path: str = f"{pathlib.Path(__file__).resolve().parent.parent.__str__()}/tmp"
     rule_engine_api: str
+    beacon_llm_api: str
 
 
 class Settings(BaseSettings):
